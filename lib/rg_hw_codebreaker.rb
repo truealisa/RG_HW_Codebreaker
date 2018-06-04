@@ -1,5 +1,3 @@
-require "rg_hw_codebreaker/version"
-
-module RgHwCodebreaker
-  # Your code goes here...
-end
+require 'rg_hw_codebreaker/version'
+require 'rg_hw_codebreaker/game'
+require 'rg_hw_codebreaker/cli'
