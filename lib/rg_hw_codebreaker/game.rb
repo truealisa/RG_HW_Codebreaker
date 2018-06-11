@@ -1,10 +1,12 @@
 module RgHwCodebreaker
   # Class Game responsible for game mechanics
   class Game
+    attr_reader :turns
+
     def initialize
-      @code = []
       @turns = 10
-      @hint = 1
+      @hints = 1
+      @code = []
     end
 
     def start
@@ -20,7 +22,12 @@ module RgHwCodebreaker
     end
 
     def give_a_hint
-      puts "Hint: #{@code[0]}xxx\n\n"
+      if @hints.zero?
+        puts 'No hints left :('
+      else
+        puts "Hint: #{@code[0]}xxx\n\n"
+        @hints -= 1
+      end
     end
   end
 end

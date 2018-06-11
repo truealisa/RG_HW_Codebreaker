@@ -14,14 +14,13 @@ module RgHwCodebreaker
         expect(code.size).to eq(4)
       end
       it 'generates secret code with numbers from 1 to 6' do
-        expect(code).to all(be_between(1, 6).inclusive)
+        expect(code).to all(match(/\A[1-6]\z/))
       end
     end
 
-    describe '#submit_guess' do
-      it 'accept from user 4 numbers from 1 to 6'
-      it 'compare user guess to secret code'
-      it 'return result of comparison'
+    describe '#check_guess' do
+      it 'decrease amount of turns by one'
+      it 'counts all appearences of each guessed digit in a secret code'
     end
   end
 end
