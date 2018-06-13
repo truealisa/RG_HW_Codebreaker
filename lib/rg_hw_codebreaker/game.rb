@@ -23,7 +23,7 @@ module RgHwCodebreaker
 
     def give_a_hint
       if @hints.zero?
-        puts 'No hints left :('
+        puts "No hints left :(\n"
       else
         puts "Hint: #{@code[0]}xxx\n\n"
         @hints -= 1

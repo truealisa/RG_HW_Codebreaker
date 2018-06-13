@@ -11,6 +11,7 @@ module RgHwCodebreaker
     def initialize
       @current_menu = :main_menu
       @exit_break = false
+      @best_results = YAML.load_file('lib/rg_hw_codebreaker/results.yml')
     end
 
     def run
@@ -105,7 +106,11 @@ module RgHwCodebreaker
         puts "Result: *no matches*\n\n"
       end
       guess_result[:exact_hits] == 4 ? win : print_turns
-      lose if @current_menu != :after_game_menu && @game.turns.zero?
+      lose if no_turns_left?
+    end
+
+    def no_turns_left?
+      @current_menu == :in_game_menu && @game.turns.zero?
     end
 
     def win
@@ -119,29 +124,28 @@ module RgHwCodebreaker
       puts LOSE_MSG
     end
 
+    def save_result
+      if save_result?
+        puts 'Enter your name:'
+        player_name = Readline.readline('>>> ')
+        current_result = [player_name, Date.today, 10 - @game.turns]
+        write_result_to_file(current_result)
+        puts "Result was saved\n\n"
+      else
+        puts "Result was not saved\n\n"
+      end
+    end
+
     def save_result?
       puts 'Do you want to save your result?(y/n)'
       save = Readline.readline('>>> ')
       save == 'y'
     end
 
-    def save_result
-      if save_result?
-        puts 'Enter your name:'
-        player_name = Readline.readline('>>> ')
-        result_arr = [player_name, Date.today, 10 - @game.turns]
-        write_result_to_file(result_arr)
-        puts "Result saved\n\n"
-      else
-        puts "Result is not saved\n\n"
-      end
-    end
-
-    def write_result_to_file(result_arr)
-      prev_results = YAML.load_file('lib/rg_hw_codebreaker/results.yml')
-      prev_results << result_arr
+    def write_result_to_file(current_result)
+      @best_results << current_result
       File.open('lib/rg_hw_codebreaker/results.yml', 'w') do |file|
-        YAML.dump(prev_results, file)
+        YAML.dump(@best_results, file)
       end
     end
 
@@ -152,8 +156,7 @@ module RgHwCodebreaker
     def best_results
       @current_menu = :short_menu
       puts "BEST RESULTS\n\n"
-      best_results = YAML.load_file('lib/rg_hw_codebreaker/results.yml')
-      best_results.each do |result_record|
+      @best_results.each do |result_record|
         result_record.each { |col| print col.to_s.ljust(15) }
         puts "\n"
       end

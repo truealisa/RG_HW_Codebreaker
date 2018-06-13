@@ -109,7 +109,7 @@ module RgHwCodebreaker
         end
 
         it 'breaks the loop' do
-          expect(subject).to receive(:exit?).once
+          expect(subject).to receive(:exit?)
           subject.repl
         end
       end
@@ -121,34 +121,33 @@ module RgHwCodebreaker
         end
 
         it 'continues to loop' do
-          expect(subject).to receive(:exit?).exactly(:twice)
+          expect(subject).to receive(:exit?).twice
           subject.repl
         end
 
         it 'catches input with readline' do
-          expect(Readline).to receive(:readline).exactly(:twice)
+          expect(Readline).to receive(:readline).twice
           subject.repl
         end
 
         it 'handles input' do
-          expect(subject).to receive(:handle_input).with('user input').exactly(:twice)
+          expect(subject).to receive(:handle_input).with('user input').twice
           subject.repl
         end
       end
     end
 
     describe '#exit?' do
-      context 'instance variable @exit_break is falsey' do
-        it 'returns false' do
-          expect(subject.exit?).to be_falsey
-        end
+      context 'instance variable @exit_break is false' do
+        specify { expect(subject.exit?).to be false }
       end
 
-      context 'instance variable @exit_break is truthy' do
-        it 'returns true' do
+      context 'instance variable @exit_break is true' do
+        before do
           subject.instance_variable_set(:@exit_break, true)
-          expect(subject.exit?).to be_truthy
         end
+
+        specify { expect(subject.exit?).to be true }
       end
     end
 
@@ -169,15 +168,15 @@ module RgHwCodebreaker
         let(:input) { 'some input' }
 
         it 'detects selected menu item from input' do
-          expect(subject).to receive(:detect_selected).with(kind_of(String)).exactly(:once)
+          expect(subject).to receive(:detect_selected).with(kind_of(String))
           subject.handle_input(input)
         end
 
         context 'input is invalid' do
           let(:input) { 'invalid input' }
 
-          it "calls 'invalid_selection' method" do
-            expect(subject).to receive(:invalid_selection).exactly(:once)
+          it "calls '#invalid_selection' method" do
+            expect(subject).to receive(:invalid_selection)
             subject.handle_input(input)
           end
         end
@@ -186,7 +185,7 @@ module RgHwCodebreaker
           let(:input) { '1' }
 
           it 'evalutes selected option' do
-            expect(subject).to receive(:eval).with(kind_of(String)).exactly(:once)
+            expect(subject).to receive(:eval).with(kind_of(String))
             subject.handle_input(input)
           end
         end
@@ -200,7 +199,7 @@ module RgHwCodebreaker
 
           it 'returns corresponding menu item' do
             expect(subject).to receive(:detect_selected).with(kind_of(String))
-              .exactly(:once).and_return(kind_of(Symbol))
+              .and_return(kind_of(Symbol))
             subject.detect_selected(input)
           end
         end
@@ -211,7 +210,7 @@ module RgHwCodebreaker
 
           it 'returns corresponding menu item' do
             expect(subject).to receive(:detect_selected).with(kind_of(String))
-              .exactly(:once).and_return(kind_of(Symbol))
+              .and_return(kind_of(Symbol))
             subject.detect_selected(input)
           end
         end
@@ -224,7 +223,7 @@ module RgHwCodebreaker
 
           it 'returns false' do
             expect(subject).to receive(:detect_selected).with(kind_of(String))
-              .exactly(:once).and_return(false)
+              .and_return(false)
             subject.detect_selected(input)
           end
         end
@@ -234,7 +233,7 @@ module RgHwCodebreaker
 
           it 'returns false' do
             expect(subject).to receive(:detect_selected).with(kind_of(String))
-              .exactly(:once).and_return(false)
+              .and_return(false)
             subject.detect_selected(input)
           end
         end
@@ -248,7 +247,7 @@ module RgHwCodebreaker
       end
 
       it 'shows current menu options' do
-        expect(subject).to receive(:print_current_menu).exactly(:once)
+        expect(subject).to receive(:print_current_menu)
         subject.invalid_selection
       end
     end
@@ -263,7 +262,7 @@ module RgHwCodebreaker
       end
 
       it 'creates instance variable @game with new instance of Game' do
-        expect(subject.instance_variable_get(:@game)).to be_a Game
+        expect(subject.game).to be_a Game
       end
 
       it 'starts game' do
@@ -276,12 +275,12 @@ module RgHwCodebreaker
       end
 
       it 'prints turns counter' do
-        expect(subject).to receive(:print_turns).exactly(:once)
+        expect(subject).to receive(:print_turns)
         subject.start_game
       end
 
       it 'shows current menu options' do
-        expect(subject).to receive(:print_current_menu).exactly(:once)
+        expect(subject).to receive(:print_current_menu)
         subject.start_game
       end
     end
@@ -302,8 +301,7 @@ module RgHwCodebreaker
 
       it 'prints to console message with the left turns number' do
         subject.print_turns
-        expect($stdout.string).to end_with("Turns left: #{subject
-          .instance_variable_get(:@game).turns}\n\n")
+        expect($stdout.string).to end_with("Turns left: #{subject.game.turns}\n\n")
       end
     end
 
@@ -335,7 +333,7 @@ module RgHwCodebreaker
         end
 
         it 'checkes guess for matches' do
-          expect(subject.instance_variable_get(:@game)).to receive(:check_guess)
+          expect(subject.game).to receive(:check_guess)
             .with(kind_of(String))
           subject.submit_guess
         end
@@ -353,7 +351,7 @@ module RgHwCodebreaker
       end
 
       it 'shows current menu options' do
-        expect(subject).to receive(:print_current_menu).exactly(:once)
+        expect(subject).to receive(:print_current_menu)
         subject.submit_guess
       end
     end
@@ -362,48 +360,340 @@ module RgHwCodebreaker
       context 'guess is valid (contains 4 digits in the range from 1 to 6)' do
         let(:guess) { '1256' }
 
-        it 'returns true' do
-          expect(subject.valid_guess?(guess)).to be true
-        end
+        specify { expect(subject.valid_guess?(guess)).to be true }
       end
 
       context 'guess in invalid' do
         context 'guess contains more than 4 digits' do
           let(:guess) { '12345' }
 
-          it 'returns false' do
-            expect(subject.valid_guess?(guess)).to be false
-          end
+          specify { expect(subject.valid_guess?(guess)).to be false }
         end
 
         context "guess contains '0'" do
           let(:guess) { '0123' }
 
-          it 'returns false' do
-            expect(subject.valid_guess?(guess)).to be false
-          end
+          specify { expect(subject.valid_guess?(guess)).to be false }
         end
 
         context "guess contains '7'" do
           let(:guess) { '1237' }
 
-          it 'returns false' do
-            expect(subject.valid_guess?(guess)).to be false
-          end
+          specify { expect(subject.valid_guess?(guess)).to be false }
         end
 
-        context "guess contains non-digit chars" do
+        context 'guess contains non-digit chars' do
           let(:guess) { '123o' }
 
-          it 'returns false' do
-            expect(subject.valid_guess?(guess)).to be false
-          end
+          specify { expect(subject.valid_guess?(guess)).to be false }
         end
       end
     end
 
     describe '#handle_guess_result' do
-      
+      before do
+        allow(subject).to receive(:print_turns).at_least(:once)
+      end
+
+      context 'not winning guess' do
+        let(:guess_result) { { all_hits: 2, exact_hits: 1, part_hits: 1 } }
+
+        it 'prints turns counter' do
+          expect(subject).to receive(:print_turns)
+          subject.handle_guess_result(guess_result)
+        end
+
+        it 'checks left turns' do
+          expect(subject).to receive(:no_turns_left?)
+          subject.handle_guess_result(guess_result)
+        end
+
+        context 'guess contains no matches' do
+          let(:guess_result) { { all_hits: 0, exact_hits: 0, part_hits: 0 } }
+
+          before do
+            subject.handle_guess_result(guess_result)
+          end
+
+          it 'reports about no matches to console' do
+            expect($stdout.string).to include('Result: *no matches*')
+          end
+        end
+
+        context 'guess contains some matches (2 - exact, 2 - part)' do
+          let(:guess_result) { { all_hits: 4, exact_hits: 2, part_hits: 2 } }
+
+          before do
+            subject.handle_guess_result(guess_result)
+          end
+
+          it 'reports about exact matches to console' do
+            expect($stdout.string).to include('+' * 2)
+          end
+
+          it 'reports about part matches to console' do
+            expect($stdout.string).to include('-' * 2)
+          end
+        end
+
+        context 'no turns left' do
+          before do
+            allow(subject).to receive(:no_turns_left?).and_return(true)
+          end
+
+          it "calls '#lose' method" do
+            expect(subject).to receive(:lose)
+            subject.handle_guess_result(guess_result)
+          end
+        end
+      end
+
+      context 'winning guess (4 exact matches)' do
+        let(:guess_result) { { all_hits: 4, exact_hits: 4, part_hits: 0 } }
+
+        before do
+          allow(subject).to receive(:win)
+          subject.handle_guess_result(guess_result)
+        end
+
+        it 'reports about matches to console' do
+          expect($stdout.string).to include('+' * 4)
+        end
+
+        it "calls '#win' method" do
+          expect(subject).to receive(:win)
+          subject.handle_guess_result(guess_result)
+        end
+      end
+    end
+
+    describe '#no_turns_left?' do
+      before do
+        subject.start_game
+      end
+
+      context 'game is not finished yet and all turns are used' do
+        before do
+          allow(subject.game).to receive(:turns).and_return(0)
+        end
+
+        specify { expect(subject.no_turns_left?).to be true }
+      end
+
+      context 'all turns are used, but game is already finished (won)' do
+        before do
+          allow(subject.game).to receive(:turns).and_return(0)
+          subject.instance_variable_set(:@current_menu, :after_game_menu)
+        end
+
+        specify { expect(subject.no_turns_left?).to be false }
+      end
+
+      context 'game is not finished yet and some turns are left' do
+        specify { expect(subject.no_turns_left?).to be false }
+      end
+    end
+
+    describe '#win' do
+      before do
+        allow(subject).to receive(:save_result)
+        subject.win
+      end
+
+      it 'sets current menu to after-game menu' do
+        expect(subject.instance_variable_get(:@current_menu)).to eq(:after_game_menu)
+      end
+
+      it 'prints winning message to console' do
+        expect { subject.win }.to output(Cli::WIN_MSG).to_stdout
+      end
+
+      it "calls '#save_result' method" do
+        expect(subject).to receive(:save_result)
+        subject.win
+      end
+    end
+
+    describe '#lose' do
+      before do
+        subject.lose
+      end
+
+      it 'sets current menu to after-game menu' do
+        expect(subject.instance_variable_get(:@current_menu)).to eq(:after_game_menu)
+      end
+
+      it 'prints lose message to console' do
+        expect { subject.lose }.to output(Cli::LOSE_MSG).to_stdout
+      end
+    end
+
+    describe '#save_result' do
+      context 'user wants to save result' do
+        before do
+          allow(subject).to receive(:save_result?).and_return(true)
+          allow(Readline).to receive(:readline).and_return('username')
+          allow(subject).to receive(:write_result_to_file).with(kind_of(Array))
+          subject.start_game
+          subject.save_result
+        end
+
+        it 'asks user to enter their name' do
+          expect($stdout.string).to include('Enter your name:')
+        end
+
+        it 'gets entered username with readline' do
+          expect(Readline).to receive(:readline)
+          subject.save_result
+        end
+
+        it 'writes result to file' do
+          expect(subject).to receive(:write_result_to_file)
+            .with(array_including('username', Date.today, 10 - subject.game.turns))
+          subject.save_result
+        end
+
+        it 'prints message about saving result to console' do
+          expect($stdout.string).to include('Result was saved')
+        end
+      end
+
+      context 'user does not want to save result' do
+        before { allow(subject).to receive(:save_result?).and_return(false) }
+
+        specify { expect { subject.save_result }.to output("Result was not saved\n\n").to_stdout }
+      end
+    end
+
+    describe '#save_result?' do
+      before do
+        allow(Readline).to receive(:readline)
+      end
+
+      it 'asks user if they want to save result' do
+        expect { subject.save_result? }.to output("Do you want to save your result?(y/n)\n").to_stdout
+      end
+
+      context 'user chose to save result' do
+        before do
+          allow(Readline).to receive(:readline).and_return('y')
+        end
+
+        specify { expect(subject.save_result?).to be true }
+      end
+
+      context 'user chose not to save result' do
+        before do
+          allow(Readline).to receive(:readline).and_return('n')
+        end
+
+        specify { expect(subject.save_result?).to be false }
+      end
+
+      context 'user entered anything else' do
+        before do
+          allow(Readline).to receive(:readline).and_return('abracadabra')
+        end
+
+        specify { expect(subject.save_result?).to be false }
+      end
+    end
+
+    describe '#write_result_to_file' do
+      let(:current_result) { ['test_username', Date.today, 5] }
+      let(:new_cli) { Cli.new }
+
+      after(:all) do
+        result_file = YAML.load_file('lib/rg_hw_codebreaker/results.yml')
+        result_file.slice!(-1)
+        File.open('lib/rg_hw_codebreaker/results.yml', 'w') do |file|
+          YAML.dump(result_file, file)
+        end
+      end
+
+      it 'adds current result to best results' do
+        expect(subject.instance_variable_get(:@best_results)).to receive(:<<).with(current_result)
+        subject.write_result_to_file(current_result)
+      end
+
+      it 'rewrites results.yml with current result included' do
+        subject.write_result_to_file(current_result)
+        expect(new_cli.instance_variable_get(:@best_results)).to include(current_result)
+      end
+    end
+
+    describe '#hint' do
+      before do
+        subject.start_game
+      end
+
+      it 'shows hint' do
+        expect(subject.game).to receive(:give_a_hint)
+        subject.hint
+      end
+    end
+
+    describe '#best_results' do
+      before do
+        subject.best_results
+      end
+
+      it 'sets current menu to short menu' do
+        expect(subject.instance_variable_get(:@current_menu)).to eq(:short_menu)
+      end
+
+      it 'prints to console header for best results' do
+        expect($stdout.string).to include('BEST RESULTS')
+      end
+
+      it 'prints each result record from best results' do
+        subject.instance_variable_get(:@best_results).each do |result_record|
+          expect($stdout.string).to match(%r{^#{result_record[0]}\s+
+            #{result_record[1]}\s+#{result_record[2]}\s+$}x)
+        end
+      end
+
+      it 'shows current menu options' do
+        expect(subject).to receive(:print_current_menu)
+        subject.best_results
+      end
+    end
+
+    describe '#help' do
+      before do
+        subject.help
+      end
+
+      it 'sets current menu to short menu' do
+        expect(subject.instance_variable_get(:@current_menu)).to eq(:short_menu)
+      end
+
+      it 'prints help message to console' do
+        expect($stdout.string).to include(Cli::HELP_MSG)
+      end
+
+      it 'shows current menu options' do
+        expect(subject).to receive(:print_current_menu)
+        subject.help
+      end
+    end
+
+    describe '#go_to_main_menu' do
+      it 'sets current menu to main menu' do
+        subject.help
+        subject.go_to_main_menu
+        expect(subject.instance_variable_get(:@current_menu)).to eq(:main_menu)
+      end
+
+      it 'greets user' do
+        expect(subject).to receive(:greet)
+        subject.go_to_main_menu
+      end
+
+      it 'shows main menu options' do
+        expect(subject).to receive(:print_current_menu)
+        subject.go_to_main_menu
+      end
     end
   end
 end
