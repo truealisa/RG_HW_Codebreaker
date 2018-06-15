@@ -627,9 +627,22 @@ module RgHwCodebreaker
         subject.start_game
       end
 
-      it 'shows hint' do
-        expect(subject.game).to receive(:give_a_hint)
+      it 'checks if there any hints left' do
+        expect(subject.game).to receive(:any_hints_left?)
         subject.hint
+      end
+
+      context 'some hints left' do
+        it 'prints hint to console' do
+          expect { subject.hint }.to output(
+            "Hint: #{subject.game.instance_variable_get(:@code)[0]}xxx\n\n").to_stdout
+        end
+      end
+
+      context 'no hints left' do
+        before { subject.game.instance_variable_set(:@hints, 0) }
+
+        specify { expect { subject.hint }.to output("No hints left :(\n\n").to_stdout }
       end
     end
 

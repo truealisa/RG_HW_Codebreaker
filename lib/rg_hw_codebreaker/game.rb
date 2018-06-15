@@ -21,13 +21,13 @@ module RgHwCodebreaker
       { all_hits: all_hits, exact_hits: exact_hits, part_hits: part_hits }
     end
 
+    def any_hints_left?
+      @hints.zero? ? false : true
+    end
+
     def give_a_hint
-      if @hints.zero?
-        puts "No hints left :(\n"
-      else
-        puts "Hint: #{@code[0]}xxx\n\n"
-        @hints -= 1
-      end
+      @hints -= 1
+      @code[0]
     end
   end
 end

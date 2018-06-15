@@ -21,10 +21,6 @@ module RgHwCodebreaker
     describe '#check_guess' do
       let(:guess) { '1234' }
 
-      before do
-        # subject.check_guess(guess)
-      end
-
       it 'decreases number of left turns by 1' do
         expect { subject.check_guess(guess) }.to change { subject.turns }.from(10).to(9)
       end
@@ -36,7 +32,7 @@ module RgHwCodebreaker
       end
     end
 
-    describe '#give_a_hint' do
+    describe '#any_hints_left?' do
       before do
         subject.start
       end
@@ -44,20 +40,23 @@ module RgHwCodebreaker
       context 'no hints left' do
         before { subject.instance_variable_set(:@hints, 0) }
 
-        specify { expect { subject.give_a_hint }.to output("No hints left :(\n").to_stdout }
+        specify { expect(subject.any_hints_left?).to be false }
       end
 
       context 'some hints left' do
-        it 'prints hint to console' do
-          expect { subject.give_a_hint }.to output(
-            "Hint: #{subject.instance_variable_get(:@code)[0]}xxx\n\n").to_stdout
-        end
+        specify { expect(subject.any_hints_left?).to be true }
+      end
+    end
 
-        it 'decreases number of left hints by 1' do
-          expect { subject.give_a_hint }.to change {
-            subject.instance_variable_get(:@hints)
-          }.from(1).to(0)
-        end
+    describe '#give_a_hint' do
+      it 'decreases number of left hints by 1' do
+        expect { subject.give_a_hint }.to change {
+          subject.instance_variable_get(:@hints)
+        }.from(1).to(0)
+      end
+
+      it 'returns first digit from the code' do
+        expect(subject.give_a_hint).to eq(subject.instance_variable_get(:@code)[0])
       end
     end
   end

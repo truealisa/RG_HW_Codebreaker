@@ -150,7 +150,11 @@ module RgHwCodebreaker
     end
 
     def hint
-      @game.give_a_hint
+      if @game.any_hints_left?
+        puts "Hint: #{@game.give_a_hint}xxx\n\n"
+      else
+        puts("No hints left :(\n\n")
+      end
     end
 
     def best_results
