@@ -22,7 +22,7 @@ module RgHwCodebreaker
         subject.run
       end
     end
- 
+
     describe '#greet' do
       it 'prints to console greeting message' do
         expect { subject.greet }.to output(Cli::WELCOME_MSG).to_stdout
@@ -661,8 +661,7 @@ module RgHwCodebreaker
 
       it 'prints each result record from best results' do
         subject.instance_variable_get(:@best_results).each do |result_record|
-          expect($stdout.string).to match(%r{^#{result_record[0]}\s+
-            #{result_record[1]}\s+#{result_record[2]}\s+$}x)
+          expect($stdout.string).to match(%r{^#{result_record[0]}\s+#{result_record[1]}\s+#{result_record[2]}\s+$})
         end
       end
 

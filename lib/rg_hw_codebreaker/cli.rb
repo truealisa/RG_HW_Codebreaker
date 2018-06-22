@@ -11,7 +11,7 @@ module RgHwCodebreaker
     def initialize
       @current_menu = :main_menu
       @exit_break = false
-      @best_results = YAML.load_file('lib/rg_hw_codebreaker/results.yml')
+      @best_results = YAML.load_file(File.join(__dir__, 'results.yml'))
     end
 
     def run
@@ -144,7 +144,7 @@ module RgHwCodebreaker
 
     def write_result_to_file(current_result)
       @best_results << current_result
-      File.open('lib/rg_hw_codebreaker/results.yml', 'w') do |file|
+      File.open(File.join(__dir__, 'results.yml'), 'w') do |file|
         YAML.dump(@best_results, file)
       end
     end
