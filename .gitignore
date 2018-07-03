@@ -9,3 +9,6 @@
 
 # rspec failure tracking
 .rspec_status
+
+# game results file
+lib/rg_hw_codebreaker/results.yml
