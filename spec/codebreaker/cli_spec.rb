@@ -322,7 +322,7 @@ module RgHwCodebreaker
       end
 
       it 'validates guess' do
-        expect(subject).to receive(:valid_guess?).with(kind_of(String))
+        expect(subject.instance_variable_get(:@game)).to receive(:valid_guess?).with(kind_of(String))
         subject.submit_guess
       end
 
@@ -353,40 +353,6 @@ module RgHwCodebreaker
       it 'shows current menu options' do
         expect(subject).to receive(:print_current_menu)
         subject.submit_guess
-      end
-    end
-
-    describe '#valid_guess?' do
-      context 'guess is valid (contains 4 digits in the range from 1 to 6)' do
-        let(:guess) { '1256' }
-
-        specify { expect(subject.valid_guess?(guess)).to be true }
-      end
-
-      context 'guess in invalid' do
-        context 'guess contains more than 4 digits' do
-          let(:guess) { '12345' }
-
-          specify { expect(subject.valid_guess?(guess)).to be false }
-        end
-
-        context "guess contains '0'" do
-          let(:guess) { '0123' }
-
-          specify { expect(subject.valid_guess?(guess)).to be false }
-        end
-
-        context "guess contains '7'" do
-          let(:guess) { '1237' }
-
-          specify { expect(subject.valid_guess?(guess)).to be false }
-        end
-
-        context 'guess contains non-digit chars' do
-          let(:guess) { '123o' }
-
-          specify { expect(subject.valid_guess?(guess)).to be false }
-        end
       end
     end
 

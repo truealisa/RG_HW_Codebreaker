@@ -13,6 +13,14 @@ module RgHwCodebreaker
       4.times { @code << rand(1..6).to_s }
     end
 
+    def valid_guess?(guess)
+      if guess.size == 4 && guess.chars.all? { |char| char.to_i.between?(1, 6) }
+        true
+      else
+        false
+      end
+    end
+
     def check_guess(guess)
       @turns -= 1
       all_hits = guess.chars.count { |digit| @code.include?(digit) }

@@ -80,21 +80,13 @@ module RgHwCodebreaker
     def submit_guess
       puts 'Your guess:'
       guess = Readline.readline('>>> ')
-      if valid_guess?(guess)
+      if @game.valid_guess?(guess)
         guess_result = @game.check_guess(guess)
         handle_guess_result(guess_result)
       else
         puts "Your input is invalid!\n\n"
       end
       print_current_menu
-    end
-
-    def valid_guess?(guess)
-      if guess.size == 4 && guess.chars.all? { |char| char.to_i.between?(1, 6) }
-        true
-      else
-        false
-      end
     end
 
     def handle_guess_result(guess_result)

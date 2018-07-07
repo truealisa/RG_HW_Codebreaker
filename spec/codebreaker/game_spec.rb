@@ -18,6 +18,40 @@ module RgHwCodebreaker
       end
     end
 
+    describe '#valid_guess?' do
+      context 'guess is valid (contains 4 digits in the range from 1 to 6)' do
+        let(:guess) { '1256' }
+
+        specify { expect(subject.valid_guess?(guess)).to be true }
+      end
+
+      context 'guess in invalid' do
+        context 'guess contains more than 4 digits' do
+          let(:guess) { '12345' }
+
+          specify { expect(subject.valid_guess?(guess)).to be false }
+        end
+
+        context "guess contains '0'" do
+          let(:guess) { '0123' }
+
+          specify { expect(subject.valid_guess?(guess)).to be false }
+        end
+
+        context "guess contains '7'" do
+          let(:guess) { '1237' }
+
+          specify { expect(subject.valid_guess?(guess)).to be false }
+        end
+
+        context 'guess contains non-digit chars' do
+          let(:guess) { '123o' }
+
+          specify { expect(subject.valid_guess?(guess)).to be false }
+        end
+      end
+    end
+
     describe '#check_guess' do
       let(:guess) { '1234' }
 
@@ -26,8 +60,8 @@ module RgHwCodebreaker
       end
 
       it 'returns hash with matches' do
-        expect(subject.check_guess(guess)).to include(all_hits: kind_of(Numeric), 
-                                                      exact_hits: kind_of(Numeric), 
+        expect(subject.check_guess(guess)).to include(all_hits: kind_of(Numeric),
+                                                      exact_hits: kind_of(Numeric),
                                                       part_hits: kind_of(Numeric))
       end
     end
