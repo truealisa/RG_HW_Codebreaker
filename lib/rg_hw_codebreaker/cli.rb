@@ -99,8 +99,7 @@ module RgHwCodebreaker
 
     def handle_guess_result(guess_result)
       if guess_result[:all_hits].positive?
-        puts "Result: #{'+' * guess_result[:exact_hits]} \
-        #{'-' * guess_result[:part_hits]}\n\n"
+        puts "Result: #{'+' * guess_result[:exact_hits] + ' ' + '-' * guess_result[:part_hits]}\n\n"
       else
         puts "Result: *no matches*\n\n"
       end
