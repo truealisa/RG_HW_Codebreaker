@@ -1,16 +1,21 @@
 require 'readline'
 require 'yaml'
 require 'date'
-require_relative 'cli_constants'
 
 module RgHwCodebreaker
   # Class Cli responsible for console communication with player
   class Cli
     attr_reader :game
 
+    MENU = { main_menu: %w[start_game best_results help],
+             in_game_menu: %w[submit_guess hint go_to_main_menu],
+             after_game_menu: %w[play_again go_to_main_menu],
+             short_menu: %w[go_to_main_menu] }.freeze
+
     def initialize
       @current_menu = :main_menu
       @exit_break = false
+      @messages = YAML.load_file(File.join(__dir__, 'cli_messages.yml'))
     end
 
     def run
@@ -20,7 +25,7 @@ module RgHwCodebreaker
     end
 
     def greet
-      print WELCOME_MSG
+      print @messages[:welcome_msg]
     end
 
     def print_current_menu
@@ -59,7 +64,7 @@ module RgHwCodebreaker
     end
 
     def invalid_selection
-      puts INVALID_MSG
+      puts @messages[:invalid_msg]
       print_current_menu
     end
 
@@ -67,7 +72,7 @@ module RgHwCodebreaker
       @current_menu = :in_game_menu
       @game = Game.new
       @game.start
-      puts GAME_MSG
+      puts @messages[:game_msg]
       print_turns
       print_current_menu
     end
@@ -105,13 +110,13 @@ module RgHwCodebreaker
 
     def win
       @current_menu = :after_game_menu
-      puts WIN_MSG
+      puts @messages[:win_msg]
       save_result
     end
 
     def lose
       @current_menu = :after_game_menu
-      puts LOSE_MSG
+      puts @messages[:lose_msg]
     end
 
     def save_result
@@ -171,7 +176,7 @@ module RgHwCodebreaker
 
     def help
       @current_menu = :short_menu
-      puts HELP_MSG
+      puts @messages[:help_msg]
       print_current_menu
     end
 

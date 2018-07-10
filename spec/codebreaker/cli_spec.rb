@@ -25,7 +25,7 @@ module RgHwCodebreaker
 
     describe '#greet' do
       it 'prints to console greeting message' do
-        expect { subject.greet }.to output(Cli::WELCOME_MSG).to_stdout
+        expect { subject.greet }.to output(subject.instance_variable_get(:@messages)[:welcome_msg]).to_stdout
       end
     end
 
@@ -243,7 +243,7 @@ module RgHwCodebreaker
     describe '#invalid_selection' do
       it 'prints to console warning message about invalid selection' do
         subject.invalid_selection
-        expect($stdout.string).to include(Cli::INVALID_MSG)
+        expect($stdout.string).to include(subject.instance_variable_get(:@messages)[:invalid_msg])
       end
 
       it 'shows current menu options' do
@@ -271,7 +271,7 @@ module RgHwCodebreaker
       end
 
       it 'prints game message to console' do
-        expect($stdout.string).to include(Cli::GAME_MSG)
+        expect($stdout.string).to include(subject.instance_variable_get(:@messages)[:game_msg])
       end
 
       it 'prints turns counter' do
@@ -471,7 +471,7 @@ module RgHwCodebreaker
       end
 
       it 'prints winning message to console' do
-        expect { subject.win }.to output(Cli::WIN_MSG).to_stdout
+        expect { subject.win }.to output(subject.instance_variable_get(:@messages)[:win_msg]).to_stdout
       end
 
       it "calls '#save_result' method" do
@@ -490,7 +490,7 @@ module RgHwCodebreaker
       end
 
       it 'prints lose message to console' do
-        expect { subject.lose }.to output(Cli::LOSE_MSG).to_stdout
+        expect { subject.lose }.to output(subject.instance_variable_get(:@messages)[:lose_msg]).to_stdout
       end
     end
 
@@ -681,7 +681,7 @@ module RgHwCodebreaker
       end
 
       it 'prints help message to console' do
-        expect($stdout.string).to include(Cli::HELP_MSG)
+        expect($stdout.string).to include(subject.instance_variable_get(:@messages)[:help_msg])
       end
 
       it 'shows current menu options' do
