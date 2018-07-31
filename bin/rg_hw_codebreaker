@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "rg_hw_codebreaker"
+
+include RgHwCodebreaker
+cli = Cli.new
+cli.run
