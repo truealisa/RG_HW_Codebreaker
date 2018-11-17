@@ -30,15 +30,7 @@ A great way to get started gathering user stories is to do a high-level brain du
 
 ## Usage
 
-### To play from command line:
-
-    $ git clone https://github.com/truealisa/rg_hw_codebreaker.git
-
-Run application from its folder:
-
-    $ ruby bin/rg_hw_codebreaker
-    
-### To use in your own app:
+### To use gem in your own app:
 
 **Install gem**
 
@@ -51,6 +43,16 @@ gem 'rg_hw_codebreaker', github: 'truealisa/rg_hw_codebreaker'
 And then execute:
 
     $ bundle
+
+### To play from command line:
+
+Clone this repo:
+
+    $ git clone https://github.com/truealisa/rg_hw_codebreaker.git
+
+Run application from its folder:
+
+    $ ruby bin/rg_hw_codebreaker
 
 ## Tests
 
