@@ -28,7 +28,19 @@ A great way to get started gathering user stories is to do a high-level brain du
 
 7. ```Code-breaker saves score``` - After the game is won or lost, the code-breaker can opt to save information about the game: who (initials?), how many turns, and so on.
 
-## Installation
+## Usage
+
+### To play from command line:
+
+    $ git clone https://github.com/truealisa/rg_hw_codebreaker.git
+
+Run application from its folder:
+
+    $ ruby bin/rg_hw_codebreaker
+    
+### To use in your own app:
+
+**Install gem**
 
 Add this line to your application's Gemfile:
 
@@ -39,16 +51,6 @@ gem 'rg_hw_codebreaker', github: 'truealisa/rg_hw_codebreaker'
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install rg_hw_codebreaker
-
-## Usage
-
-Run application from its folder:
-
-    $ ruby bin/rg_hw_codebreaker
 
 ## Tests
 
