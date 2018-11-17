@@ -33,7 +33,7 @@ A great way to get started gathering user stories is to do a high-level brain du
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rg_hw_codebreaker'
+gem 'rg_hw_codebreaker', github: 'truealisa/rg_hw_codebreaker'
 ```
 
 And then execute:
